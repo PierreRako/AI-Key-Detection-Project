@@ -29,7 +29,7 @@ print("STFT window duration is: {}sc".format(frameDuration))
 # of (randomly chosen) 11sc of an input song. This can be used to create a dataset 
 # that can be directly fed to any neural network.
 
-def our_chromagram(signal):
+def prepare_data1(signal):
     l = len(signal)
     offset = np.random.randint(l - 70*hopLength)
     croppedSig = signal[offset: offset + 59*frameSize + 1]
@@ -51,7 +51,7 @@ plt.show()
 # the well-tempered scale of music : we uses a scale of 24 frequencies/octave 
 # and take into account 5 octave starting from C2 (65.41Hz)
 
-def our_spectrogram(signal):
+def prepare_data2(signal):
     l = len(signal)
     offset = np.random.randint(l - 70*hopLength)
     croppedSig = signal[offset: offset + 59*frameSize + 1]
