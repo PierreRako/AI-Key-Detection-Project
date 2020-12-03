@@ -33,9 +33,11 @@ def our_chromagram(signal):
     l = len(signal)
     offset = np.random.randint(l - 70*hopLength)
     croppedSig = signal[offset: offset + 59*frameSize + 1]
-    cropSigDur = len(croppedSig)/sr
-    print("New signal duration : ", cropSigDur)
+    #cropSigDur = len(croppedSig)/sr
+    #print("New signal duration : ", cropSigDur)
     return librosa.feature.chroma_stft(croppedSig, sr, n_fft= frameSize, hop_length = hopLength)
+
+#%% Test Function our_chromagram
 chroma = our_chromagram(signal)
 print("dimension chromagramme : ", chroma.shape)
 librosa.display.specshow(chroma)
