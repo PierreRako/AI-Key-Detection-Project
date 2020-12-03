@@ -14,7 +14,6 @@ signal, sample_rate = librosa.load(file, sr=44100)
 #%% Data preparation constants
 nbOfFrames = 60
 sr = 44100
-binsPerOctave = 24
 frameSize = 8192
 hopLength = frameSize
 
@@ -43,10 +42,17 @@ def prepare_data1(signal):
 chroma = prepare_data1(signal)
 print("dimension chromagramme : ", chroma.shape)
 fig, ax = plt.subplots()
-img = librosa.display.specshow(chroma, y_axis='chroma', x_axis='s', ax=ax)
+img = librosa.display.specshow(chroma,hop_length=hopLength,
+                               sr=44100, x_axis='s', y_axis='chroma', ax=ax)
 fig.colorbar(img, ax=ax)
 ax.set(title='Chromagram')
 plt.show()
+
+#%% Constants for 2nd function
+
+fMin=librosa.note_to_hz('C2')
+nBins=120
+binsPerOctave = 24
 
 #%% FUNCTION TO TRANSFORM A WAVEFORM INTO A SPECTROGRAM WHICH IS LINEAR WITH RESPECT TO SEMITONES
 
@@ -62,8 +68,8 @@ def prepare_data2(signal):
     croppedSig = signal[offset: offset + 59*frameSize + 1]
     return np.abs(
         librosa.cqt(
-            croppedSig,sr,hop_length=hopLength, fmin=librosa.note_to_hz('C2'),
-            n_bins=120,bins_per_octave=binsPerOctave
+            croppedSig,sr,hop_length=hopLength, fmin=fMin,
+            n_bins=nBins,bins_per_octave=binsPerOctave
         )
     )
 
@@ -71,10 +77,8 @@ def prepare_data2(signal):
 C = prepare_data2(signal)
 print("dimension spectrogramme : ", C.shape)
 fig, ax = plt.subplots()
-img = librosa.display.specshow(librosa.amplitude_to_db(C, ref=np.max),
-                               sr=sr, x_axis='s', y_axis='cqt_note', ax=ax)
+img = librosa.display.specshow(librosa.amplitude_to_db(C, ref=np.max),hop_length=hopLength,
+bins_per_octave=binsPerOctave, fmin=fMin,sr=sr, x_axis='s', y_axis='cqt_note', ax=ax)
 ax.set_title('Constant-Q power spectrum')
 fig.colorbar(img, ax=ax, format="%+2.0f dB")
 plt.show()
-
-#%% Various Tests
