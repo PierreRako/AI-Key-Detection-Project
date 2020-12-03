@@ -1,3 +1,4 @@
 # Audio files / So that we dont pull and push entire datasets
 *.mp3
 *.wav
+*.png
