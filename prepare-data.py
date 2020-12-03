@@ -45,6 +45,14 @@ plt.show()
 
 #%% FUNCTION TO TRANSFORM A WAVEFORM INTO A SPECTROGRAM WHICH IS LINEAR WITH RESPECT TO SEMITONES
 
-## 
+# output of this function is a 120*60 matrix which represents the constantQ 
+# tranform of (randomly chosen) 11sc of the input array signal. The constantQ 
+# is a special type of spectrogram which re-scale the frequency-axis to match
+# the well-tempered scale of music : we uses a scale of 24 frequencies/octave 
+# and take into account 5 octave starting from C2 (65.41Hz)
+
 def our_spectrogram(signal):
-    return None
+    l = len(signal)
+    offset = np.random.randint(l - 70*hopLength)
+    croppedSig = signal[offset: offset + 59*frameSize + 1]
+    return librosa.cqt(signal,sr,hop_length=hopLength, fmin=65.41,n_bins=120,bins_per_octave=binsPerOctave,)
