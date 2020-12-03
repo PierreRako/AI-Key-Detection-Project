@@ -1,3 +1,5 @@
+#%%
+
 import numpy as np
 import librosa, librosa.display;
 import matplotlib.pyplot as plt
@@ -37,8 +39,8 @@ def prepare_data1(signal):
     #print("New signal duration : ", cropSigDur)
     return librosa.feature.chroma_stft(croppedSig, sr, n_fft= frameSize, hop_length = hopLength)
 
-#%% Test Function our_chromagram
-chroma = our_chromagram(signal)
+#%% Test Function prepare_data1
+chroma = prepare_data1(signal)
 print("dimension chromagramme : ", chroma.shape)
 librosa.display.specshow(chroma)
 plt.show()
@@ -55,4 +57,18 @@ def prepare_data2(signal):
     l = len(signal)
     offset = np.random.randint(l - 70*hopLength)
     croppedSig = signal[offset: offset + 59*frameSize + 1]
-    return librosa.cqt(signal,sr,hop_length=hopLength, fmin=65.41,n_bins=120,bins_per_octave=binsPerOctave,)
+    return np.abs(
+        librosa.cqt(
+            croppedSig,sr,hop_length=hopLength, fmin=librosa.note_to_hz('C2'),
+            n_bins=120,bins_per_octave=binsPerOctave
+        )
+    )
+
+#%% test function prepare_data2
+constantQ = prepare_data2(signal)
+print("dimension spectrogramme : ", constantQ.shape)
+librosa.display.specshow(librosa.amplitude_to_db(constantQ,ref=np.max),
+                               sr=sr, x_axis='time', y_axis='cqt_note')
+plt.show()
+
+# %%
