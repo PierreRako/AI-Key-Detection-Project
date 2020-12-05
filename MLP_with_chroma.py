@@ -1,8 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPClassifier
+import pandas as pd
 
 # Dataset loading (panda) and separation
+
+
 
 # Neural network parameters
 
