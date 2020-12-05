@@ -5,6 +5,7 @@ from prepare_data import prepare_data1
 import librosa, librosa.display
 from PIL import Image
 import numpy as np
+import pandas as pd
 
 #%% Converting data files into PNG images = Extracting spectrogram
 cmap = plt.get_cmap('inferno')
@@ -112,7 +113,21 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     keyList = audio_key_tuples[:, 2]
     key_codeList = audio_key_tuples[:, 3]
 
-    return audio_key_tuples
+    dictionnary = {'filename':namesList, 'chromagram':chroma_vectorList, 'key':keyList, 'coded_key':key_codeList}
+    df = pd.DataFrame(data=dictionnary)
+
+    csv_file_name = str(input("Enter the name of your dataset:"))
+    csv_file_name += ".csv"
+    file_already_exists = glob.glob(csv_file_name)
+
+    while file_already_exists:
+        csv_file_name = str(input("This dataset already has a csv file, enter another name:"))
+        csv_file_name += ".csv"
+        file_already_exists = glob.glob(csv_file_name)
+
+    df.to_csv(csv_file_name, index=False, encoding='utf8')
+
+    return df
 
 def create_numpy_1D_array_from_image(image_path):
     img = Image.open(image_path)
