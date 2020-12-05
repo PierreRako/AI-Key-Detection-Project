@@ -14,8 +14,8 @@ hopLength = frameSize
 
 hopLengthDuration = float(hopLength)/sr
 frameDuration = float(frameSize)/sr
-print("STFT hop length duration is: {}sc".format(hopLengthDuration))
-print("STFT window duration is: {}sc".format(frameDuration))
+#print("STFT hop length duration is: {}sc".format(hopLengthDuration))
+#print("STFT window duration is: {}sc".format(frameDuration))
 
 #%% FUNCTION TO TRANSFORM A WAVEFORM INTO A CHROMAGRAM OF LENGTH 60 FRAMES
 
