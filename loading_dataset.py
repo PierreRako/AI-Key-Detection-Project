@@ -20,6 +20,8 @@ def fileName_from_path(path):
     fileName = separator.join(splitName)
     return fileName
 
+#%%---------------------------------------------------------------------------------------------------------------------------
+
 # @param files is a list of paths to files
 # @param keys is a list of pahts to key files
 def zip_audio_key(files, keys):
@@ -40,10 +42,12 @@ def zip_audio_key(files, keys):
 
     return orderedKeyFiles
 
+#%%---------------------------------------------------------------------------------------------------------------------------
+
 # A function to load a dataset (folder containing all audios)
 # It associates the path of an audio to its corresponding key
-# @param data_set_path User has to specify the paf to the folder containing all audio
-# @param key_annotation_path
+# @param data_set_path : path to the folder containing all audio
+# @param key_annotation_path : path to the folder containing all key annotations
 # @return list of tuples [audio, key]
 def load_dataset(data_set_path, key_annotation_path):
     print(f"loading {data_set_path}")
@@ -56,6 +60,8 @@ def load_dataset(data_set_path, key_annotation_path):
     audio_key_tuples = zip_audio_key(files, key_annotations)
 
     return audio_key_tuples
+
+#%%---------------------------------------------------------------------------------------------------------------------------
 
 # A function to convert audio files of a dataset to chroma image and save it
 # @param data_set_path
@@ -93,9 +99,13 @@ def convert_audio_to_chroma_images(data_set_path, key_annotation_path):
 
     return audio_key_tuples
 
-# A function to prepare the panda dataframe
-# @param 
-# @return
+#%%---------------------------------------------------------------------------------------------------------------------------    
+
+# A function to prepare the panda dataframe from the audios of a dataset and its key annotations
+# @param data_set_path : path to the folder containing all audio
+# @param key_annotation_path : path to the folder containing all key annotations
+# @return df : panda dataframe of the dataset 
+# 4 columns: filename, chromagram, key, codedkey
 
 def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     audio_key_tuples = convert_audio_to_chroma_images(data_set_path, key_annotation_path)
@@ -113,9 +123,11 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     keyList = audio_key_tuples[:, 2]
     key_codeList = audio_key_tuples[:, 3]
 
+    # Creating the dataframe using a dictionnary
     dictionnary = {'filename':namesList, 'chromagram':chroma_vectorList, 'key':keyList, 'coded_key':key_codeList}
     df = pd.DataFrame(data=dictionnary)
 
+    # Letting the user choose the name of the csv file
     csv_file_name = str(input("Enter the name of your dataset:"))
     csv_file_name += ".csv"
     file_already_exists = glob.glob(csv_file_name)
@@ -125,9 +137,12 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
         csv_file_name += ".csv"
         file_already_exists = glob.glob(csv_file_name)
 
+    # Saving the dataframe to a csv file
     df.to_csv(csv_file_name, index=False, encoding='utf8')
 
     return df
+
+#%%---------------------------------------------------------------------------------------------------------------------------
 
 def create_numpy_1D_array_from_image(image_path):
     img = Image.open(image_path)
@@ -135,3 +150,5 @@ def create_numpy_1D_array_from_image(image_path):
     img_vector = np.reshape(img_array, -1)
 
     return img_vector
+
+#---------------------------------------------------------------------------------------------------------------------------
