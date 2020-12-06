@@ -9,10 +9,11 @@ import pandas as pd
 dataset_path="./Datasets/giantsteps-key-dataset-master/audio"
 key_annotation_path="./Datasets/giantsteps-key-dataset-master/annotations/key"
 chroma_df=prepare_panda_dataFrame(dataset_path,key_annotation_path)
+print("data loaded")
 
 X, y = chroma_df['chromagram'], chroma_df['codedkey']
 X_train, X_test, y_train, y_test = train_test_split(X ,y ,test_size=0.2)
-
+print("data separated")
 # Neural network parameters
 epochs = 200
 learning_rate = 0.01
@@ -21,11 +22,12 @@ activation = 'logistic'
 
 # NNet init
 clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, activation=activation, 
-random_state=1, max_iter=epochs, learning_rate_init=learning_rate)
-
+random_state=1, max_iter=epochs, learning_rate_init=learning_rate, verbose=True)
+print("Classifier initialized")
 # NNet training
+print("fitting starts...")
 clf.fit(X_train,y_train)
-
+print("fitting finished")
 # Some insights on the training
 array1 = clf.predict_proba(X_test[:1])
 array2 = clf.predict(X_test[:5, :])
