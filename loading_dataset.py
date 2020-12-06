@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import os
 import glob
-from prepare_data import prepare_data1 
+from prepare_data import prepare_data1, prepare_data2
 import librosa, librosa.display
 from PIL import Image
 import numpy as np
@@ -66,26 +66,38 @@ def load_dataset(data_set_path, key_annotation_path):
 # A function to convert audio files of a dataset to chroma image and save it
 # @param data_set_path
 
-def convert_audio_to_chroma_images(data_set_path, key_annotation_path):
+def convert_audio_to_chroma_or_spectro(data_set_path, key_annotation_path):
     audio_key_tuples = load_dataset(data_set_path, key_annotation_path)
+
+    print("What transformation would you like to perform on your dataset,")
+    transformation_type = int(input("enter 1 for chromagram, 2 for spectrogram:"))
+    print(transformation_type)
+    while (transformation_type <= 0  or transformation_type > 2):
+        transformation_type = int(input("Please enter a valid number. 1 for chromagram, 2 for spectrogram:"))
+        print(transformation_type)
 
     for i in range(len(audio_key_tuples)):
         #Extracting the fileName from the path
         fileName = fileName_from_path(audio_key_tuples[i][0])
 
         signal, sample_rate = librosa.load(audio_key_tuples[i][0], sr=44100)
-        chroma_matrix = prepare_data1(signal)
-        chroma_vector = np.reshape(chroma_matrix, -1)
+
+        if (transformation_type == 1):
+            transfo_matrix = prepare_data1(signal)
+        elif (transformation_type == 2):
+            transfo_matrix = prepare_data2(signal)
+
+        transfo_vector = np.reshape(transfo_matrix, -1)
 
         # Saving chroma to an image file
         plt.figure()
-        librosa.display.specshow(chroma_matrix)
+        librosa.display.specshow(transfo_matrix)
         plt.axis('off')
         plt.savefig(f'img_data/{fileName}.jpg')
         plt.close()
 
         #Setting the path to the image
-        audio_key_tuples[i][0] = chroma_vector
+        audio_key_tuples[i][0] = transfo_vector
 
         #Adding the name of the file to the list
         audio_key_tuples[i] = [str(fileName)] + audio_key_tuples[i]
@@ -103,7 +115,7 @@ def convert_audio_to_chroma_images(data_set_path, key_annotation_path):
 # 4 columns: filename, chromagram, key, codedkey
 
 def prepare_panda_dataFrame(data_set_path, key_annotation_path):
-    audio_key_tuples = convert_audio_to_chroma_images(data_set_path, key_annotation_path)
+    audio_key_tuples = convert_audio_to_chroma_or_spectro(data_set_path, key_annotation_path)
 
     #Adding keys to audio_key_tuples
     for i in range(len(audio_key_tuples)):
