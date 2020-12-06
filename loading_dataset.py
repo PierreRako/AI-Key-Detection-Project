@@ -69,33 +69,28 @@ def load_dataset(data_set_path, key_annotation_path):
 def convert_audio_to_chroma_images(data_set_path, key_annotation_path):
     audio_key_tuples = load_dataset(data_set_path, key_annotation_path)
 
-    j = 1
     for i in range(len(audio_key_tuples)):
         #Extracting the fileName from the path
         fileName = fileName_from_path(audio_key_tuples[i][0])
-        
-        #if (j==2):
-        #    break
 
         signal, sample_rate = librosa.load(audio_key_tuples[i][0], sr=44100)
-        chroma = prepare_data1(signal)
+        chroma_matrix = prepare_data1(signal)
+        chroma_vector = np.reshape(chroma_matrix, -1)
+
+        # Saving chroma to an image file
         plt.figure()
-        librosa.display.specshow(chroma)
+        librosa.display.specshow(chroma_matrix)
         plt.axis('off')
-        plt.savefig(f'img_data/{fileName}.png')
+        plt.savefig(f'img_data/{fileName}.jpg')
         plt.close()
 
         #Setting the path to the image
-        #cwd = os.getcwd()
-        #audio_key_tuples[i][0] = glob.glob(os.path.abspath(f'{cwd}/img_data/{fileName}.png'))
-        audio_key_tuples[i][0] = os.path.relpath(f'img_data/{fileName}.png')
+        audio_key_tuples[i][0] = chroma_vector
 
         #Adding the name of the file to the list
         audio_key_tuples[i] = [str(fileName)] + audio_key_tuples[i]
 
-        print(f"Image n°{j} processed: " + audio_key_tuples[i][0] + " " + str(audio_key_tuples[i][1]) + " " + str(audio_key_tuples[i][2]))
-
-        j+=1
+    print("Audios have correctly been processed")
 
     return audio_key_tuples
 
@@ -110,11 +105,11 @@ def convert_audio_to_chroma_images(data_set_path, key_annotation_path):
 def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     audio_key_tuples = convert_audio_to_chroma_images(data_set_path, key_annotation_path)
 
-    #Converting all images to numpy vectors
+    #Adding keys to audio_key_tuples
     for i in range(len(audio_key_tuples)):
-        audio_key_tuples[i][1] = create_numpy_1D_array_from_image(audio_key_tuples[i][1])
-        audio_key_tuples[i].append(keys.index(audio_key_tuples[i][2]))
 
+        audio_key_tuples[i].append(keys.index(audio_key_tuples[i][2]))
+    
     #Converting the list into a numpy array
     audio_key_tuples = np.array(audio_key_tuples)
 
@@ -143,12 +138,16 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     return df
 
 #%%---------------------------------------------------------------------------------------------------------------------------
-
-def create_numpy_1D_array_from_image(image_path):
+''' Useless
+def create_numpy_1D_array_from_image(image_path, bool):
     img = Image.open(image_path)
-    img_array = np.array(img)
+    img_array = np.asarray(img)
+
+    if bool:
+        print(img_array)
+
     img_vector = np.reshape(img_array, -1)
 
     return img_vector
-
+'''
 #---------------------------------------------------------------------------------------------------------------------------
