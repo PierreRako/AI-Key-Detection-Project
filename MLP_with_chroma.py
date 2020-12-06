@@ -10,8 +10,10 @@ dataset_path="./Datasets/giantsteps-key-dataset-master/audio"
 key_annotation_path="./Datasets/giantsteps-key-dataset-master/annotations/key"
 chroma_df=prepare_panda_dataFrame(dataset_path,key_annotation_path)
 print("data loaded")
-
-X, y = chroma_df['chromagram'], chroma_df['coded_key']
+print(chroma_df.head(3))
+X, y = np.stack(chroma_df['chromagram']), np.array(chroma_df['coded_key'].astype('int'))
+print("shape of X and y : ", X.shape,y.shape)
+#print("first row of X : ", X[0,:20],y[0])
 X_train, X_test, y_train, y_test = train_test_split(X ,y ,test_size=0.2)
 print("data separated")
 # Neural network parameters
@@ -32,3 +34,4 @@ print("fitting finished")
 array1 = clf.predict_proba(X_test[:1])
 array2 = clf.predict(X_test[:5, :])
 array3 = clf.score(X_test, y_test)
+print("look for variables")
