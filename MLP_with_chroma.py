@@ -16,7 +16,7 @@ X_train, X_test, y_train, y_test = train_test_split(X ,y ,test_size=0.2)
 # Neural network parameters
 epochs = 200
 learning_rate = 0.01
-hidden_layer_sizes = (100,50,30)
+hidden_layer_sizes = (100,50,30) # these represents the number of neurons IN THE HIDDEN LAYERS ONLYS
 activation = 'logistic'
 
 # NNet init
