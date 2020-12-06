@@ -149,6 +149,13 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
 
     return df
 
+#%% function to convert the str chromagrams in np.array
+
+def chromas_str_to_float(str):
+    str2= 'test split'
+    print(str2.split())
+    return np.array(list(map(float,(str[1:-1]).split())))
+
 #%%---------------------------------------------------------------------------------------------------------------------------
 ''' Useless
 def create_numpy_1D_array_from_image(image_path, bool):
