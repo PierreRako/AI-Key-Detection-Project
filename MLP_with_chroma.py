@@ -11,7 +11,7 @@ key_annotation_path="./Datasets/giantsteps-key-dataset-master/annotations/key"
 chroma_df=prepare_panda_dataFrame(dataset_path,key_annotation_path)
 print("data loaded")
 
-X, y = chroma_df['chromagram'], chroma_df['codedkey']
+X, y = chroma_df['chromagram'], chroma_df['coded_key']
 X_train, X_test, y_train, y_test = train_test_split(X ,y ,test_size=0.2)
 print("data separated")
 # Neural network parameters
