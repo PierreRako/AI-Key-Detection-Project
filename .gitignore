@@ -4,3 +4,4 @@
 __pycache__/
 *.png
 *.jpg
+my_global_main.py
