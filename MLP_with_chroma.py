@@ -27,8 +27,8 @@ def network_training(learning_rate):
     verbose=True;
 
     # Regularization constant
-
-    alpha=0.0
+@eurecom.fr
+    alpha=0.0@eurecom.fr
 
     # NNet init
     clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, activation=activation, 
@@ -46,9 +46,6 @@ def network_training(learning_rate):
     print("look for variables")
     return(clf.loss_,clf,X_test,X_train,y_test,y_train)
 
-loss,clf,X_te,X_tr,y_te,y_tr = network_training(0.008)
-print(loss)
-
 def search_learning_rate():
     losses= []
     ii = np.linspace(10**-5,6*10**-2,100)
@@ -57,3 +54,6 @@ def search_learning_rate():
         losses += [network_training(ii[i])[0]]
     plt.plot(ii,losses)
     plt.show()
+
+loss,clf,X_te,X_tr,y_te,y_tr = network_training(0.008)
+print(loss)
