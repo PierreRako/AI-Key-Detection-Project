@@ -27,7 +27,6 @@ def network_training(learning_rate):
     verbose=True;
 
     # Regularization constant
-@eurecom.fr
     alpha=0.0@eurecom.fr
 
     # NNet init
