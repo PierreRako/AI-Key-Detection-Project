@@ -7,3 +7,4 @@ __pycache__/
 my_global_main.py
 *.csv
 test_dataset/
+.npy
