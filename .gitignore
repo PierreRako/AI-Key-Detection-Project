@@ -6,3 +6,4 @@ __pycache__/
 *.jpg
 my_global_main.py
 *.csv
+test_dataset/
