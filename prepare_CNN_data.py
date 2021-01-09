@@ -112,7 +112,7 @@ def prepare_cnn_data(data_set_path, key_annotation_path):
     
     #Converting the list into a numpy array
     audio_key_tuples = np.array(audio_key_tuples)
-    print(audio_key_tuples.shape)
+    #print(audio_key_tuples.shape)
     namesList = audio_key_tuples[:,0]
     chroma_matricesList = audio_key_tuples[:, 1]
     keyList = audio_key_tuples[:, 2]
@@ -136,7 +136,7 @@ def prepare_cnn_data(data_set_path, key_annotation_path):
     # Saving the dataframe to a csv file
     df.to_csv(csv_file_name, index=False, encoding='utf8')
     '''
-    return (namesList,chroma_matricesList,keyList,key_codeList)
+    return (namesList,np.stack(chroma_matricesList),keyList,key_codeList.astype('int'))
 
 
 #%%---------------------------------------------------------------------------------------------------------------------------
