@@ -1,7 +1,7 @@
 #import matplotlib.pyplot as plt
 import os
 import glob
-from prepare_data import prepare_data2
+from prepare_data import prepare_data3
 import librosa, librosa.display
 #from PIL import Image
 import numpy as np
@@ -75,7 +75,7 @@ def convert_audio_to_chroma_or_spectro(data_set_path, key_annotation_path):
 
         signal, sample_rate = librosa.load(audio_key_tuples[i][0], sr=44100)
         
-        transfo_matrix = prepare_data2(signal)
+        transfo_matrix = prepare_data3(signal)
 
         # Saving chroma to an image file
         #plt.figure()
