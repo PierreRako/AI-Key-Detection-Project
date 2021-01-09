@@ -57,3 +57,16 @@ def prepare_data2(signal):
         )
     )
 
+#%% SAME AS PREPARE_DATA2 BUT WITH A LONGER TIME EXTRACT
+
+def prepare_data3(signal):
+    _nbOfFrames = 100
+    l = len(signal)
+    offset = np.random.randint(l - (_nbOfFrames + 10)*hopLength)
+    croppedSig = signal[offset: offset + (_nbOfFrames - 1)*frameSize + 1]
+    return np.abs(
+        librosa.cqt(
+            croppedSig,sr,hop_length=hopLength, fmin=fMin,
+            n_bins=nBins,bins_per_octave=binsPerOctave
+        )
+    )
