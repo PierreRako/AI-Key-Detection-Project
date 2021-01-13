@@ -11,7 +11,7 @@ import pandas as pd
 cmap = plt.get_cmap('inferno')
 keys = 'A major,A minor,Ab major,Ab minor,B major,B minor,Bb major,Bb minor,C major,C minor,D major,D minor,Db major,Db minor,E minor,E major,Eb major,Eb minor,F minor,F major,G major,G minor,Gb major,Gb minor'.split(",")
 
-# @return fileName without any extension
+# @return fileName without any extension from a path
 def fileName_from_path(path):
     fileNameFull = path.split("/")[-1]
     splitName = fileNameFull.split(".")[:-1]
@@ -24,6 +24,7 @@ def fileName_from_path(path):
 
 # @param files is a list of paths to files
 # @param keys is a list of pahts to key files
+# @return orderedKeyFiles is a list of tuples [file, key]
 def zip_audio_key(files, keys):
     orderedKeyFiles = []
 
@@ -76,6 +77,7 @@ def convert_audio_to_chroma_or_spectro(data_set_path, key_annotation_path):
         transformation_type = int(input("Please enter a valid number. 1 for chromagram, 2 for spectrogram:"))
         print(transformation_type)
 
+    print("Processing data, please wait")
     for i in range(len(audio_key_tuples)):
         #Extracting the fileName from the path
         fileName = fileName_from_path(audio_key_tuples[i][0])
@@ -102,7 +104,7 @@ def convert_audio_to_chroma_or_spectro(data_set_path, key_annotation_path):
         #Adding the name of the file to the list
         audio_key_tuples[i] = [str(fileName)] + audio_key_tuples[i]
 
-    print("Audios have correctly been processed")
+    print("Audios have correctly been processed \n")
 
     return audio_key_tuples
 
@@ -119,7 +121,6 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
 
     #Adding keys to audio_key_tuples
     for i in range(len(audio_key_tuples)):
-
         audio_key_tuples[i].append(keys.index(audio_key_tuples[i][2]))
     
     #Converting the list into a numpy array
@@ -134,18 +135,25 @@ def prepare_panda_dataFrame(data_set_path, key_annotation_path):
     dictionnary = {'filename':namesList, 'chromagram':chroma_vectorList, 'key':keyList, 'coded_key':key_codeList}
     df = pd.DataFrame(data=dictionnary)
 
-    # Letting the user choose the name of the csv file
-    csv_file_name = str(input("Enter the name of your dataset:"))
-    csv_file_name += ".csv"
-    file_already_exists = glob.glob(csv_file_name)
+    csv_register = int(input("Do you want to register data into dataframe ? [yes: enter 1/no: enter 0]:"))
 
-    while file_already_exists:
-        csv_file_name = str(input("This dataset already has a csv file, enter another name:"))
+    while (csv_register >1 or csv_register <0):
+        print("Bad parameter:" + str(csv_register))
+        csv_register = int(input("Do you want to register data into dataframe ? [yes: enter 1/no: enter 0]:"))
+
+    if (csv_register == 1):
+        # Letting the user choose the name of the csv file
+        csv_file_name = str(input("Enter the name of your dataset:"))
         csv_file_name += ".csv"
         file_already_exists = glob.glob(csv_file_name)
 
-    # Saving the dataframe to a csv file
-    df.to_csv(csv_file_name, index=False, encoding='utf8')
+        while file_already_exists:
+            csv_file_name = str(input("This dataset already has a csv file, enter another name:"))
+            csv_file_name += ".csv"
+            file_already_exists = glob.glob(csv_file_name)
+
+        # Saving the dataframe to a csv file
+        df.to_csv(csv_file_name, index=False, encoding='utf8')
 
     return df
 
