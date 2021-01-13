@@ -115,7 +115,6 @@ def prepare_cnn_data(data_set_path, key_annotation_path):
 
     #Adding coded keys to audio_key_tuples
     for i in range(len(audio_key_tuples)):
-        print(i)
         audio_key_tuples[i].append(keys.index(audio_key_tuples[i][2]))
     
     #Converting the list into a numpy array
