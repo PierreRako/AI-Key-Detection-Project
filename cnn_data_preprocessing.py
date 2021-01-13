@@ -1,5 +1,5 @@
 import numpy as np
-from prepare_CNN_data import prepare_cnn_data
+from prepare_CNN_data_bigdataset import prepare_cnn_data
 
 # THIS SCRIPT CREATES THE NP ARRAYS WE WILL USE IN THE CNN AND SAVE THEM FOR LATER USE IN .npy FILES
 
