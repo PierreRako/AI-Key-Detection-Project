@@ -9,8 +9,8 @@ import numpy as np
 
 #%% Converting data files into PNG images = Extracting spectrogram
 #cmap = plt.get_cmap('inferno')
-keys = 'A major,A minor,g# major,g# minor,B major,B minor,A# major,a# minor,C major,C minor,D major,D minor,c# major,c# minor,E minor,E major,d# major,d# minor,F minor,F major,G major,G minor,f# major,f# minor'.split(",")
-key_tonics = 'a,b,c,d,e,f,g'
+Keys = 'a major,a minor,g# major,g# minor,b major,b minor,a# major,a# minor,c major,c minor,d major,d minor,c# major,c# minor,e minor,e major,d# major,d# minor,f minor,f major,g major,g minor,f# major,f# minor'.split(",")
+
 # @return fileName without any extension
 def fileName_from_path(path):
     fileNameFull = path.split("/")[-1]
@@ -39,7 +39,7 @@ def zip_audio_key(files, keys):
         splitted = key.split()
         try:
             tuple = [file, splitted[0] + " " + splitted[1]]
-            if tuple[1][0] in key_tonics:
+            if (splitted[0] + " " + splitted[1]) in Keys:
                 orderedKeyFiles.append(tuple)
             else:
                 print('strange tuple :' , tuple)
@@ -115,7 +115,7 @@ def prepare_cnn_data(data_set_path, key_annotation_path):
 
     #Adding coded keys to audio_key_tuples
     for i in range(len(audio_key_tuples)):
-        audio_key_tuples[i].append(keys.index(audio_key_tuples[i][2]))
+        audio_key_tuples[i].append(Keys.index(audio_key_tuples[i][2]))
     
     #Converting the list into a numpy array
     audio_key_tuples = np.array(audio_key_tuples)
