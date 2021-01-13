@@ -21,7 +21,7 @@ if verbose:
     print(y.shape)
     #plt.show()
 
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.1)
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
@@ -29,6 +29,7 @@ X_train = X_train.reshape(-1,120,100,1)
 X_test = X_test.reshape(-1,120,100,1)
 
 if verbose: print(X_train.shape, "\n", y_train.shape, "\n")
+if verbose: print("number of validation samples : ", X_test.shape)
 
 model = keras.Sequential()
 model.add(layers.Conv2D(
@@ -43,14 +44,15 @@ for _ in range(4):
         8,
         kernel_size=5,
         activation="relu",
-        padding="same"
+        padding="same",
+        kernel_regularizer=keras.regularizers.l2(l2=0.0001)
         ))
 
 model.add(layers.Permute((2,1,3)))
 
 model.add(layers.Reshape((100,-1)))
 
-model.add(layers.Dense(48,activation="relu"))
+model.add(layers.Dense(48,activation="relu",kernel_regularizer=keras.regularizers.l2(l2=0.0001)))
 
 model.add(layers.GlobalAveragePooling1D())
 
@@ -64,3 +66,4 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 model.fit(X_train,y_train,validation_data=(X_test,y_test),epochs=100, batch_size=64)
 
+print(finished)
