@@ -64,4 +64,5 @@ def search_learning_rate():
     plt.show()
 
 loss,clf,X_te,X_tr,y_te,y_tr = network_training(0.008)
+print(clf.score(X_te,y_te))
 print(loss)
