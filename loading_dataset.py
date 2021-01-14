@@ -32,14 +32,20 @@ def zip_audio_key(files, keys):
 
     for file in files:
         fileName = fileName_from_path(file)
+        found = True
 
-        index = keyNames.index(fileName)
+        try:
+            index = keyNames.index(fileName)
+            break
+        except ValueError:
+            found = False
 
-        keyFile = open(keys[index], "r")
-        key = keyFile.read()
+        if found:
+            keyFile = open(keys[index], "r")
+            key = keyFile.read()
 
-        tuple = [file, key]
-        orderedKeyFiles.append(tuple)
+            tuple = [file, key]
+            orderedKeyFiles.append(tuple)
 
     return orderedKeyFiles
 
