@@ -36,7 +36,6 @@ def zip_audio_key(files, keys):
 
         try:
             index = keyNames.index(fileName)
-            break
         except ValueError:
             found = False
 

@@ -29,7 +29,7 @@ def network_training(learning_rate):
     verbose=True;
 
     # Regularization constant
-    alpha=0.0
+    alpha=0.01
 
     # NNet init
     clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, activation=activation, 
