@@ -21,7 +21,13 @@ if verbose:
     print(y.shape)
     #plt.show()
 
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.1)
+X_train, y_train = X, y
+np_input_path= "./numpy_material/GS_key_dataset_inputs_preprocessed.npy"
+np_label_path= "./numpy_material/GS_key_dataset_labels_preprocessed.npy"
+
+X_test = np.load(np_input_path)
+y_test = np.load(np_label_path)
+
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
@@ -45,14 +51,14 @@ for _ in range(4):
         kernel_size=5,
         activation="relu",
         padding="same",
-        kernel_regularizer=keras.regularizers.l2(l2=0.0001)
+        kernel_regularizer=keras.regularizers.l2(l2=0.001)
         ))
 
 model.add(layers.Permute((2,1,3)))
 
 model.add(layers.Reshape((100,-1)))
 
-model.add(layers.Dense(48,activation="relu",kernel_regularizer=keras.regularizers.l2(l2=0.0001)))
+model.add(layers.Dense(48,activation="relu",kernel_regularizer=keras.regularizers.l2(l2=0.001)))
 
 model.add(layers.GlobalAveragePooling1D())
 
@@ -62,8 +68,8 @@ model.add(layers.Dense(24,activation="softmax"))
 
 model.summary()
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 
-model.fit(X_train,y_train,validation_data=(X_test,y_test),epochs=100, batch_size=64)
+model.fit(X_train,y_train,validation_data=(X_test,y_test),epochs=10, batch_size=32)
 
-print(finished)
+print('finished')
