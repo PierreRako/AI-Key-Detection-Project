@@ -4,6 +4,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from loading_dataset import prepare_panda_dataFrame
 import pandas as pd
+import time
 
 # Dataset loading and separation
 dataset_path = "./Datasets/giantsteps-key-dataset-master/audio"
@@ -11,6 +12,7 @@ key_annotation_path = "./Datasets/giantsteps-key-dataset-master/annotations/key"
 chroma_df = prepare_panda_dataFrame(dataset_path,key_annotation_path)
 
 def network_training(learning_rate):
+    start = time.time()
     print("Data loaded")
     print(chroma_df.head(3))
     X, y = np.stack(chroma_df['chromagram']), np.array(chroma_df['coded_key'].astype('int'))
@@ -26,10 +28,10 @@ def network_training(learning_rate):
     hidden_layer_sizes = (100,50,30) # these represents the number of neurons IN THE HIDDEN LAYERS ONLYS
     activation = 'logistic'
     validation= True;
-    verbose=True;
+    verbose=False;
 
     # Regularization constant
-    alpha=0.01
+    alpha=0.001
 
     # NNet init
     clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, activation=activation, 
@@ -46,12 +48,8 @@ def network_training(learning_rate):
 
     print("fitting finished")
 
-    # Some insights on the training
-    array1 = clf.predict_proba(X_test[:1])
-    array2 = clf.predict(X_test[:5, :])
-    array3 = clf.score(X_test, y_test)
-    
-    print("look for variables")
+    end = time.time()
+    print(end - start)
     return(clf.loss_,clf,X_test,X_train,y_test,y_train)
 
 def search_learning_rate():
@@ -63,6 +61,8 @@ def search_learning_rate():
     plt.plot(ii,losses)
     plt.show()
 
-loss,clf,X_te,X_tr,y_te,y_tr = network_training(0.008)
+
+loss,clf,X_te,X_tr,y_te,y_tr = network_training(0.01)
+
 print(clf.score(X_te,y_te))
 print(loss)
